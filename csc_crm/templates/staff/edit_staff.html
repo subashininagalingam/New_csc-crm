@@ -1,0 +1,164 @@
+
+{% extends 'staff/base.html' %}
+{% load static %}
+{% block content %}
+    
+    <div class="staff-mgmt-form-container">
+        <div class="staff-mgmt-form-header">
+            <a href="{% url 'staff_management' %}" class="back-link">← Back to Staff Management</a>
+            <h1 class="staff-mgmt-form-title">Edit {{ staff.first_name }} {{ staff.last_name }}</h1>
+        </div>
+
+        <form method="POST" class="staff-mgmt-form" id="staffMgmtForm" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                id="staffId"
+                value="{{ staff.id }}"
+            >
+
+            <!-- PERSONAL INFORMATION SECTION -->
+             <fieldset class="staff-mgmt-form-section">
+                <legend class="section-title">Personal Information</legend>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label for="employee_id" class="form-label">Employee ID *</label>
+                        {{ form.employee_id }}
+                        <span class="form-error" id="employeeIdError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email *</label>
+                        {{ form.email }}
+                        <span class="form-error" id="emailError"></span>
+                    </div>
+                </div>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label for="first_name" class="form-label">First Name *</label>
+                        {{ form.first_name }}
+                        <span class="form-error" id="firstNameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name" class="form-label">Last Name *</label>
+                        {{ form.last_name }}
+                        <span class="form-error" id="lastNameError"></span>
+                    </div> 
+                </div>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone *</label>
+                        {{ form.phone }}
+                        <span class="form-error" id="phoneError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_of_birth" class="form-label">Date of Birth</label>
+                        {{ form.date_of_birth }}
+                        <span class="form-error" id="dateOfBirthError"></span>
+                    </div>
+                </div>
+             </fieldset>
+
+             <!-- ORGANIZATION SECTION -->
+              <fieldset class="staff-mgmt-form-section">
+                <legend class="section-title">Organization</legend>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label for="role" class="form-label">Role *</label>
+                        {{ form.role }}
+                        <span class="form-error" id="roleError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="department" class="form-label">Department *</label>
+                        {{ form.department }}
+                        <span class="form-error" id="departmentError"></span>
+                    </div>
+                </div>
+                
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label for="date_of_joining" class="form-label">Date of Joining *</label>
+                        {{ form.date_of_joining }}
+                        <span class="form-error" id="dateOfJoiningError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="status" class="form-label">Status *</label>
+                        {{ form.status }}
+                        <span class="form-error" id="statusError"></span>
+                    </div>
+                </div>
+              </fieldset>
+
+              <!-- FILES AND DOCUMENTS SECTION -->
+               <fieldset class="staff-mgmt-form-section">
+
+                    <legend class="section-title">Documents</legend>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.profile_photo.id_for_label }}">Passport Size Photo</label>
+                            <div class="file-upload-wrapper">
+                                {{ form.profile_photo }}
+                                <button type="button" id="removePhotoBtn" class="remove-file-btn">X</button>
+                            </div>
+                            {% if staff.profile_photo %}
+                                    <div class="current-file-info">
+                                        <label class="file-label">Current Photo</label>
+
+                                        <div class="file-row">
+                                            <span class="file-name">
+                                                📷 {{ staff.profile_photo.name|cut:"staff_photos/" }}
+                                            </span>
+
+                                            <!-- <a href="{{ staff.profile_photo.     }}"
+                                            target="_blank"
+                                            class="view-file-btn">
+                                                View
+                                            </a> -->
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            <div class="upload-progress">
+                                <div class="progress-bar" id="photoProgressBar"></div>
+                            </div>
+                            <span id="progressText">No file selected</span>
+                            <span class="form-error" id="profilePhotoError"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+              <!-- PERFORMANCE SECTION -->
+               <fieldset class="staff-mgmt-form-section">
+                <legend class="section-title">Performance</legend>
+
+                <div class="form-row two-column">
+                    <div class="form-group" id="monthlyTargetGroup">
+                        <label for="monthly_target" class="form-label">Monthly Target (₹) *</label>
+                        {{ form.monthly_target }}
+                        <span class="form-error" id="monthlyTargetError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="performance_rating" class="form-label">Performance Rating (1-5) *</label>
+                        {{ form.performance_rating }}
+                        <span class="form-error" id="performanceRatingError"></span>
+                    </div>
+                </div>
+               </fieldset>
+
+                <!-- FORM ACTIONS -->
+                 <div class="form-actions">
+                    <a href="{% url 'staff_management' %}" class="btn btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-primary" id="updateStaffBtn" disabled>Update Staff</button>
+                 </div>
+        </form>
+    </div>
+
+{% block extra_js %}
+    <script src="{% static 'js/staff_js/edit_staff.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

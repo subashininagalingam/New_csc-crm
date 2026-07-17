@@ -1,0 +1,742 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+/* BODY */
+
+body{
+    background:white;
+    padding:30px;
+   
+}
+
+
+.heading-section{
+    margin-bottom:30px;
+    background-color:#050580;
+    padding:15px 20px;
+    border-radius:10px;
+    color:white;
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.heading-section h1{
+    font-size:30px;
+    font-weight:bold;
+    margin:0;
+}
+
+/* MAIN CONTAINER */
+
+.attendance-container{
+    width:100%;
+}
+
+.staff-checkin-btn{
+    margin-left:auto;
+}
+
+/* HEADING */
+
+
+.history-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+.attendance-submit{
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+/* TOP CARDS */
+
+.top-cards{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:20px;
+}
+
+/* ============= Hamburger =========*/
+
+
+
+.att-nav-tabs{
+     position: fixed;
+    top: 0;
+    left: -320px;
+    width: 280px;
+    height: 100vh;
+    background: #262170;
+    display:flex;
+    flex-direction:column;
+    padding:90px 20px;
+    gap:15px;
+    transition:0.3s ease;
+    z-index:2000;
+}
+
+.att-nav-toggle{
+    width:42px;
+    height:42px;
+    background:#FEF200;
+    border:none;
+    border-radius:8px;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:static !important;
+}
+
+.att-nav-tabs.show{
+    left:0;
+}
+
+.att-nav-tab-link{
+    font-weight:600;
+    color:var(--white);
+    padding:10px 16px;
+    border-radius:14px;
+    transition:.3s;
+}
+
+.att-nav-tab-link:hover{
+    background:rgba(255,255,255,0.08);
+}
+
+.active-att-nav-tab:hover{
+    background:var(--white);
+    color:var(--text);
+    backdrop-filter:blur(6px);
+}
+
+.active-att-nav-tab{
+    background:var(--secondary);
+    color:var(--primary);
+    border-bottom:none;
+}
+
+
+/* Blur only background */
+body.menu-open::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    backdrop-filter:blur(8px);
+    background:rgba(0,0,0,0.25);
+    z-index:1500;
+}
+/* ===== PROFILE page css Go to OverView page css ===== */
+
+
+
+/* CARD */
+
+.att-card{
+    background:#ffff;
+    border-radius:18px;
+    padding:15px;
+    transition:0.3s;
+    position:relative;
+    overflow:hidden;
+    
+}
+
+.att-card:hover{
+    transform:translateY(-5px);
+}
+
+/* BADGE */
+
+.status-badge{
+   
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+
+}
+/* PRESENT */
+
+.present-badge{
+
+   background:#e8f5e9;
+    color:#2e7d32;
+
+
+}
+
+
+
+/* ABSENT */
+
+.absent-badge{
+
+   background:#ffebee;
+    color:#c62828;
+
+}
+
+
+
+/* LEAVE */
+
+.leave-badge{
+  background: #fef9c3;
+    color: #854d0e;
+    
+
+}
+
+
+
+/* LATE */
+
+.late-badge{
+
+     background:#fff3e0;
+    color:#f77206;
+
+}
+/* CARD COLORS */
+
+.att-blue{
+    border-left:3px solid #2563eb;
+}
+
+.att-green{
+    border-left:3px solid #22c55e;
+}
+
+.att-red{
+    border-left:3px solid #ef4444;
+}
+
+.att-yellow{
+    border-left:3px solid #facc15;
+}
+.att-orange{
+     border-left:3px solid #ef8411;
+}
+
+
+/* CARD CONTENT */
+
+.att-card .card-content p{
+    color:#18191a;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.att-card .card-content h2{
+    font-size:20px;
+}
+
+
+
+/* TODAY ATTENDANCE */
+
+.today-attendance{
+    margin-top:40px;
+    background:#ffff;
+    color:rgb(2, 2, 162);
+    padding:15px;
+    border-radius:20px;
+}
+
+
+
+/* TOP */
+
+.today-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.today-top h2{
+    font-size:20px;
+}
+
+
+
+
+
+
+
+/* ATTENDANCE BOXES */
+
+.attendance-boxes{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+
+
+/* BOX */
+
+.attendance-box{
+    background:#ededf4;
+    padding:15px;
+    border-radius:15px;
+}
+
+.attendance-box p{
+    color:#313134;
+    margin-bottom:10px;
+    font-size:15px;
+}
+
+.attendance-box h3{
+    font-size:15px;
+}
+
+
+/* PERCENTAGE */
+
+.att-percentage-card{
+    margin-top:40px;
+    background:#ffff;
+    padding:20px;
+    border-radius:20px;
+}
+
+
+
+/* TOP */
+
+.att-percentage-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.att-percentage-top h2{
+    font-size:20px;
+    color:rgb(4, 4, 164);
+}
+
+.att-percentage-top span{
+    font-size:22px;
+    font-weight:bold;
+}
+
+
+
+/* PROGRESS BAR */
+
+.att-progress-bar{
+    width:100%;
+    height:12px;
+    background:#f4f2f2;
+    border-radius:30px;
+    overflow:hidden;
+}
+
+
+
+/* FILL */
+
+.att-progress-fill{
+    height:100%;
+    background:linear-gradient(to right,#063089,#facc15);
+    border-radius:30px;
+}
+
+
+
+/* HISTORY SECTION */
+
+.history-section{
+    margin-top:40px;
+    background:#ffff;
+    padding:15px;
+    border-radius:20px;
+    color:rgb(32, 4, 159);
+}
+
+
+
+/* TOP */
+
+.history-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    
+}
+
+
+
+/* FILTERS */
+
+.filters{
+    display:flex;
+    gap:15px;
+}
+
+
+
+/* SELECT */
+
+.filters select,
+.filters input{
+    background:#f6f6f8;
+    border:1px solid #c7c7c7;
+    color:rgb(43, 41, 41);
+    padding:8px 10px;
+    border-radius:10px;
+    font-size:12px;
+}
+.attendance-submit{
+    background:#050580;
+    color:white;
+    border:none;
+    padding:8px 10px;
+    border-radius:10px;
+    font-size:12px;
+    cursor:pointer;
+}
+.attendance-submit:hover{
+    background-color: rgb(238, 217, 31);
+}
+
+/* TABLE WRAPPER*/
+.history-section table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+.history-section thead {
+    background: linear-gradient(135deg, #050580, #1e3a8a);
+    color: #fff;
+}
+
+.history-section th {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+   
+}
+
+/* ROWS */
+.history-section td {
+    padding: 14px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+/* HOVER EFFECT */
+.history-section tbody tr {
+    transition: 0.3s;
+}
+
+.history-section tbody tr:hover {
+    background: #f3f6ff;
+    transform: scale(1.01);
+}
+
+/* STATUS BADGES IMPROVED */
+.table-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+.attendace-table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+}
+/* PRESENT */
+.present {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* ABSENT */
+.absent {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* LEAVE */
+.leave {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+/* LATE */
+.late-badge {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.table-wrapper{
+   max-height:500px;   
+    overflow-y:auto;
+   
+    border-radius:10px;
+    
+}
+
+.table-wrapper thead th{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:#050580;
+    color:white;
+}
+/* RESPONSIVE TABLE */
+@media (max-width: 768px) {
+   
+
+    .filters select,
+    .filters input,
+    .attendance-submit{
+        width:100%;
+    }
+     .card-content h2{
+        font-size:18px;
+    }
+
+    .card-content p{
+        font-size:14px;
+    }
+
+    .heading-section h1{
+        font-size:22px;
+    }
+    .history-section {
+        overflow-x: auto;
+    }
+
+    .history-section table {
+        min-width: 600px;
+    }
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+
+    .top-cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .attendance-boxes{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+@media(max-width:768px){
+ 
+
+.heading-section{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
+    .heading-section h1{
+        font-size:24px;
+    }
+
+    .staff-sidebar{
+        width:260px;
+    }
+
+    .menu-btn,
+    .staff-checkin-btn{
+        width:100%;
+    }
+
+
+
+.history-header{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+}
+
+.history-header .attendance-submit{
+    width:100%;
+    max-width:250px;
+}
+    .top-cards{
+        grid-template-columns:1fr;
+    }
+
+    .history-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .filters{
+        width:100%;
+        flex-direction:column;
+    }
+
+    .button-section{
+        flex-direction:column;
+    }
+    
+   
+      .heading-section{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
+    .staff-checkin-btn{
+        width:100%;
+        text-align:center;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .att-over-profile-image img{
+        width:90px;
+        height:90px;
+    }
+
+    .att-over-name{
+        font-size:20px;
+    }
+
+    .att-over-info p{
+        font-size:13px;
+    }
+
+    .today-top{
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+    }
+    
+
+}
+.success-message{
+
+    background:#d4edda;
+
+    color:#155724;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:20px;
+
+    font-weight:600;
+
+    border:1px solid #c3e6cb;
+}
+
+.staff-checkin-btn{
+text-decoration:none;
+    background:#16a34a;
+    color:white;
+    padding:12px 20px;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    display:inline-block;
+    transition:0.3s ease;
+    box-shadow:0 4px 10px rgba(22,163,74,0.2);
+    
+}
+
+.staff-checkin-btn:hover{
+    background:#15803d;
+    transform:translateY(-2px);
+}
+ 
+.staff-checkout-btn{
+    background:#dc2626;
+    color:white;
+    text-decoration:none;
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:600;
+     margin-left:auto;
+}
+
+.staff-checkout-btn:hover{
+    background:#b91c1c;
+}
+
+
+
+.staff-disabled-btn{
+    background:#9ca3af;
+    color:white;
+    text-decoration:none;
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:600;
+    cursor:not-allowed;
+    pointer-events:none;
+     margin-left:auto;
+}
+
+.att-header-buttons {
+    display: flex;
+    gap: 10px;
+       
+    position:absolute;
+    right:14%;
+   
+    
+
+}
+
+.att-back-btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--secondary);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    
+}
+
+.att-back-btn:hover {
+    background: #fff85a;
+    color: var(--text);
+    transform: translateY(-1px);
+}
+/* ====================MENU BUTTON======================== */

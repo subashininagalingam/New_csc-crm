@@ -1,0 +1,593 @@
+.dashboard-container{
+
+    padding:30px;
+
+    background:#f4f6fb;
+
+}
+
+/* Header */
+
+.dashboard-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.dashboard-header h1{
+
+    font-size:28px;
+
+    margin-bottom:5px;
+
+}
+
+.dashboard-header p{
+
+    color:#777;
+
+}
+
+.breadcrumb{
+
+    color:#666;
+
+    font-size:14px;
+
+}
+/* ===========================================
+   Dashboard Subtitle
+=========================================== */
+
+.dashboard-subtitle-container{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    margin:40px 0 25px;
+
+}
+
+
+
+.dashboard-subtitle-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.dashboard-subtitle-content h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#1f2937;
+
+    letter-spacing:.3px;
+
+}
+
+.dashboard-subtitle-content p{
+
+    margin-top:6px;
+
+    color:#6b7280;
+
+    font-size:14px;
+
+    font-weight:400;
+
+}
+/* Cards */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:20px;
+
+    margin-bottom:25px;
+
+}
+
+.card{
+
+    background:#fff;
+
+    border-radius:14px;
+
+    padding:18px 20px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.card-icon{
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#fff;
+
+    font-size:22px;
+
+    flex-shrink:0;
+
+}
+
+.card-details{
+
+    flex:1;
+
+}
+
+.card-details h4{
+
+    margin:0;
+
+    color:#6b7280;
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.card-details h2{
+
+    margin-top:8px;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+.lead-total .card-icon{
+    background:#2563eb;
+}
+
+.lead-new .card-icon{
+    background:#22c55e;
+}
+
+.lead-contacted .card-icon{
+    background:#f59e0b;
+}
+
+.lead-interested .card-icon{
+    background:#8b5cf6;
+}
+
+.lead-demo .card-icon{
+    background:#06b6d4;
+}
+
+.lead-enrolled .card-icon{
+    background:#16a34a;
+}
+
+.lead-lost .card-icon{
+    background:#ef4444;
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 10px 24px rgba(0,0,0,.12);
+
+}
+
+
+
+
+
+/* Sections */
+
+.dashboard-content{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:20px;
+
+    align-items:start;
+
+}
+.dashboard-card{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+}
+
+.dashboard-card h3{
+
+    margin-bottom:20px;
+
+}
+
+/* Attendance */
+
+.dashboard-attendance-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+
+    margin-bottom:30px;
+
+}
+
+.dashboard-attendance-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    background:#f8fafc;
+
+    transition:.3s;
+
+}
+
+.dashboard-attendance-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.dashboard-attendance-icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#fff;
+
+    font-size:22px;
+
+}
+
+.dashboard-attendance-content span{
+
+    display:block;
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+.dashboard-attendance-content h2{
+
+    margin-top:5px;
+
+    font-size:26px;
+
+}
+
+.dashboard-present .dashboard-attendance-icon{
+
+    background:#22c55e;
+
+}
+
+.dashboard-late .dashboard-attendance-icon{
+
+    background:#f59e0b;
+
+}
+
+.dashboard-absent .dashboard-attendance-icon{
+
+    background:#ef4444;
+
+}
+
+.dashboard-leave .dashboard-attendance-icon{
+
+    background:#3b82f6;
+
+}
+/* Progress */
+
+.dashboard-progress-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:10px;
+
+}
+
+.dashboard-progress-bar{
+    width:100%;
+    height:14px;
+    background:#e7edf5;
+    border-radius:30px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.dashboard-progress-fill{
+    display:block;
+    height:100%;
+    background:linear-gradient(90deg,#00c853,#4caf50);
+    border-radius:30px;
+    transition:width .5s ease;
+}
+
+/* Departments */
+
+.department-dashboard-card{
+
+    background:#fff;
+
+    margin-bottom: 20px;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+}
+
+
+.department-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+/* Recent Staff */
+
+.dashboard-recent-staff-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.dashboard-recent-staff-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #edf1f7;
+
+}
+
+.dashboard-recent-staff-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.dashboard-staff-avatar{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    background:#262170;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    flex-shrink:0;
+
+    text-transform:uppercase;
+
+}
+
+.dashboard-staff-details{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+.dashboard-staff-details h5{
+
+    margin:0 0 6px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#1f2937;
+
+}
+
+.dashboard-staff-meta{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+    font-size:13px;
+
+    color:#6b7280;
+
+}
+
+.dashboard-staff-meta span{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+}
+
+.dashboard-staff-meta i{
+
+    color:#262170;
+
+    font-size:12px;
+
+}
+
+/* Buttons */
+
+.dashboard-action-btn{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:100%;
+
+    height:48px;
+
+    border-radius:10px;
+
+    margin-bottom:15px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.dashboard-action-btn:first-child{
+
+    background:#262170;
+
+}
+
+.dashboard-action-btn:last-child{
+
+    background:#16a34a;
+
+}
+
+.dashboard-action-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.secondary{
+
+    background:#16a34a;
+
+}
+
+
+
+/* Responsive */
+
+@media(max-width:900px){
+
+.dashboard-content{
+
+grid-template-columns:1fr;
+
+}
+
+.attendance-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}

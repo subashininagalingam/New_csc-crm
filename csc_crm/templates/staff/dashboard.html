@@ -1,0 +1,367 @@
+{% extends 'staff/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <!-- Header -->
+
+    <div class="dashboard-header">
+
+        <div>
+            <h1>CRM Dashboard</h1>
+            <p>Overview of Staff, Leads, Attendance and Business Performance</p>
+        </div>
+
+        <div class="breadcrumb">
+            Home /
+            <span>Staff</span> /
+            <strong>Dashboard</strong>
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="stats-grid">
+
+        <div class="card">
+            <h4>Total Staff</h4>
+            <h2>{{ total_staff }}</h2>
+        </div>
+
+        <div class="card">
+            <h4>Active Staff</h4>
+            <h2>{{ active_staff }}</h2>
+        </div>
+
+        <div class="card">
+            <h4>On Leave</h4>
+            <h2>{{ on_leave }}</h2>
+        </div>
+
+        <div class="card">
+            <h4>Inactive</h4>
+            <h2>{{ inactive }}</h2>
+        </div>
+
+        <div class="card">
+            <h4>Terminated</h4>
+            <h2>{{ terminated }}</h2>
+        </div>
+
+        <div class="card">
+            <h4>Average Rating</h4>
+            <h2>{{ average_rating }}</h2>
+        </div>
+
+    </div>
+
+<!-- ================================ -->
+<!-- Lead Overview -->
+<!-- ================================ -->
+
+<div class="stats-grid">
+
+    <div class="card lead-total">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>Total Leads</h4>
+            <h2>{{ total_leads }}</h2>
+        </div>
+
+    </div>
+
+    <div class="card lead-new">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>New</h4>
+            <h2>{{ new_leads }}</h2>
+        </div>
+
+    </div>
+
+    <div class="card lead-contacted">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-phone"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>Contacted</h4>
+            <h2>{{ contacted_leads }}</h2>
+        </div>
+
+    </div>
+
+    <div class="card lead-interested">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>Interested</h4>
+            <h2>{{ interested_leads }}</h2>
+        </div>
+
+    </div>
+
+    <div class="card lead-demo">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-chalkboard-user"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>Demo Scheduled</h4>
+            <h2>{{ demo_leads }}</h2>
+        </div>
+
+    </div>
+
+    <div class="card lead-enrolled">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-user-graduate"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>Enrolled</h4>
+            <h2>{{ enrolled_leads }}</h2>
+        </div>
+
+    </div>
+
+    <div class="card lead-lost">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-user-slash"></i>
+        </div>
+
+        <div class="card-details">
+            <h4>Lost</h4>
+            <h2>{{ lost_leads }}</h2>
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- Middle Section -->
+
+    <div class="dashboard-content">
+
+        <!-- Attendance -->
+
+        <div class="dashboard-card">
+
+            <h3>Attendance Analytics</h3>
+
+            <div class="dashboard-attendance-grid">
+
+    <div class="dashboard-attendance-card dashboard-present">
+
+        <div class="dashboard-attendance-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        
+
+        <div class="dashboard-attendance-content">
+            <span>Active Staff</span>
+            <h2>{{ active_staff }}</h2>
+        </div>
+
+    </div>
+
+    <div class="dashboard-attendance-card dashboard-present">
+
+        <div class="dashboard-attendance-icon">
+            <i class="fa-solid fa-user-check"></i>
+        </div>
+        
+
+        <div class="dashboard-attendance-content">
+            <span>Present</span>
+            <h2>{{ present }}</h2>
+        </div>
+
+    </div>
+
+    <div class="dashboard-attendance-card dashboard-late">
+
+        <div class="dashboard-attendance-icon">
+            <i class="fa-solid fa-clock"></i>
+        </div>
+
+        <div class="dashboard-attendance-content">
+            <span>Late</span>
+            <h2>{{ late }}</h2>
+        </div>
+
+    </div>
+
+    <div class="dashboard-attendance-card dashboard-absent">
+
+        <div class="dashboard-attendance-icon">
+            <i class="fa-solid fa-user-xmark"></i>
+        </div>
+
+        <div class="dashboard-attendance-content">
+            <span>Absent</span>
+            <h2>{{ absent }}</h2>
+        </div>
+
+    </div>
+
+    <div class="dashboard-attendance-card dashboard-leave">
+
+        <div class="dashboard-attendance-icon">
+            <i class="fa-solid fa-person-walking-arrow-right"></i>
+        </div>
+
+        <div class="dashboard-attendance-content">
+            <span>Leave</span>
+            <h2>{{ leave }}</h2>
+        </div>
+
+    </div>
+
+</div>
+
+            <div class="attendance-progress">
+
+                <div class="progress-top">
+
+                    <span>Today's Attendance</span>
+
+                    <strong>{{ attendance_percentage }}%</strong>
+
+                </div>
+
+                <div class="dashboard-progress-bar">
+
+                    <div class="dashboard-progress-fill"
+                        style="width: {{ attendance_percentage|default:0 }}%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Departments -->
+
+        <div class="department-dashboard-card">
+
+            <h3>Departments</h3>
+
+            {% for dept in departments %}
+
+            <div class="department-row">
+
+                <span>{{ dept.dept_name }}</span>
+
+                <strong>{{ dept.total_staff }}</strong>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Bottom Section -->
+
+    <div class="dashboard-content">
+
+        <!-- Recent Staff -->
+
+        <div class="dashboard-card">
+
+            <h3>Recent Staff</h3>
+
+            <div class="dashboard-recent-staff-list">
+
+    {% for staff in recent_staff %}
+
+    <div class="dashboard-recent-staff-item">
+
+        <div class="dashboard-staff-avatar">
+            {{ staff.first_name|slice:":1" }}{{ staff.last_name|slice:":1" }}
+        </div>
+
+        <div class="dashboard-staff-details">
+
+            <h5>
+                {{ staff.first_name }} {{ staff.last_name }}
+            </h5>
+
+            <div class="dashboard-staff-meta">
+
+                <span>
+                    <i class="fa-solid fa-briefcase"></i>
+                    {{ staff.role.role_name }}
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-building"></i>
+                    {{ staff.department.dept_name }}
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-calendar-days"></i>
+                    {{ staff.date_of_joining|date:"d M Y" }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+
+        <div class="dashboard-card">
+
+            <h3>Quick Actions</h3>
+
+            <div class="dashboard-action-list">
+
+    <a href="{% url 'add_staff' %}" class="dashboard-action-btn">
+        Add Staff
+    </a>
+
+    <a href="{% url 'staff_management' %}" class="dashboard-action-btn">
+        Staff Management
+    </a>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

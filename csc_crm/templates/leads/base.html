@@ -1,0 +1,108 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CSC CRM{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lead_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lead_details.css' %}">
+    <link rel="stylesheet" href="{% static 'css/call_log.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/followup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pipeline_view.css' %}">
+</head>
+<body>
+     
+<div class="crm-wrapper">
+    <!-- Nav Bar -->
+     <header class="main-navbar">
+        <div class="navbar-left">
+            <h1 class="brand-title">CSC</h1>
+        </div>
+     </header>
+</div>
+
+<!-- Module Navigation Tabs -->
+     <!-- Mobile Hamburger -->
+<button class="menu-toggle" id="menuToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Module Navigation Tabs -->
+<nav class="module-tabs" id="moduleTabs">
+
+    <a href="{% url 'leads:lead_capture_list' %}" 
+       class="tab-link {% if request.resolver_match.url_name == 'lead_capture_list' or request.resolver_match.url_name == 'lead_capture_create' %}active-tab{% endif %}">
+       Lead Capture
+    </a>
+
+    <a href="{% url 'leads:lead_pipeline_view' %}"
+       class="tab-link {% if request.resolver_match.url_name == 'lead_pipeline_view' %}active-tab{% endif %}">
+       Pipeline View
+    </a>
+
+    <a href="{% url 'leads:call_logs' %}" 
+       class="tab-link {% if request.resolver_match.url_name == 'call_logs' %}active-tab{% endif %}">
+       Call-Log
+    </a>
+
+    <a href="{% url 'leads:followup_shedule' %}"
+       class="tab-link {% if request.resolver_match.url_name == 'followup_shedule' %}active-tab{% endif %}">
+       Follow-Up
+    </a>
+
+    <a href="{% url 'leads:lead_conversion_report' %}"
+       class="tab-link {% if request.resolver_match.url_name == 'lead_conversion_report' %}active-tab{% endif %}">
+       Conversion Report
+    </a>
+
+    <div class="header-right">
+        <a href="{% url 'leads:lead_capture_create' %}" class="btn-primary">
+            + New Lead
+        </a>
+    </div>
+
+</nav>
+
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert-message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+<main class="page-body">
+    {% block content %}
+
+    {% endblock %}
+</main>
+
+<footer class="main-footer">
+
+    <div class="footer-left">
+        © 2026 CSC CRM
+    </div>
+
+    <div class="footer-right">
+        Internal System
+    </div>
+
+</footer>
+
+
+</body>
+
+<!-- Scripting Tags for JS -->
+<script src="{% static 'js/followup.js' %}"></script>
+<script src="{% static 'js/lead_capture.js' %}"></script>
+<script src="{% static 'js/call_logs.js' %}"></script>
+<script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/pipeline_view.js' %}"></script>
+</html>

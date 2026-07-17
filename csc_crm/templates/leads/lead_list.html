@@ -1,0 +1,171 @@
+{% extends 'leads/base.html' %}
+
+
+{% block content %}
+<section class="leads-page">
+    
+
+     <!-- Page Header -->  
+      <section class="page-header">
+         <div class="header-left">
+            <h1 class="page-title">Lead Management</h1>
+            <p class="page-subtitle">Manage enquiries, follow-ups and conversions</p>
+         </div>
+
+      </section>
+
+      <!-- Lead Forms -->
+      <section class="lead-form-section">
+
+         <div class="form-card">
+
+            <!-- Header -->
+            <div class="form-header">
+
+               <div class="header-icon">+</div>
+               <div class="header-content">
+                  <h1 class="form-title">{{ page_title }}</h1>
+                  <p class="form-subtitle">Capture enquiry with contact details & course interest</p>
+               </div>
+
+            </div>
+
+            <!-- Form -->
+             <form action="{% if lead %}{% url 'leads:lead_capture_update' lead.id %}{% else %}{% url 'leads:lead_capture_create' %}{% endif %}" id="leadForm" method="POST" class="lead-form">
+
+               {% csrf_token %}
+
+               {% if lead %}
+                  <input type="hidden" id="leadId" value="{{ lead.id }}">
+               {% endif %}
+
+               <!-- ROW-1 -->
+
+               <div class="form-row">
+
+                  <div class="form-group">
+                     <label class="form-label">Lead Name</label>
+                     {{ form.lead_name }}
+                  </div>
+
+                  <div class="form-group">
+                     <label class="form-label">Phone Number</label>
+                     {{ form.phone_no }}
+                     <span id="phoneError" style="color:red;"></span>
+                     <small id="phone-error" style="color:red;"></small>
+                  </div>
+
+                  <div class="form-group">
+                     <label class="form-label">Email</label>
+                     {{ form.email }}
+                     <span id="emailError" style="color:red;" class="error-message"></span>
+                     <small id="email-error" style="color:red;"></small>
+                  </div>
+
+               </div>
+
+               <!-- ROW-2 -->
+               <div class="form-row">
+
+                   <div class="form-group">
+                     <label class="form-label">Course Interested</label>
+                     {{ form.course_interested }}
+                  </div>
+
+                  <div class="form-group">
+                     <label class="form-label">Lead Source</label>
+                     {{ form.lead_source }}
+                  </div>
+
+                  <div class="form-group">
+                     <label class="form-label">Enquiry Date</label>
+                     {{ form.enquiry_date }}
+                  </div>
+
+               </div>
+
+               <!-- NOTES -->
+               <div class="form-row">
+                  <div class="form-group full-width">
+                     <label class="form-label">Initial Notes (Optional)</label>
+                     {{ form.initial_notes }}
+                  </div>
+               </div>
+
+                <!-- ROW 3 -->
+               <div class="form-row">
+
+                  <div class="form-group">
+                     <label class="form-label">Assign To</label>
+                     {{ form.assigned_to }}
+                  </div>
+
+                  <div class="form-group">
+                     <label class="form-label">Next Follow-Up Date</label>
+                     {{ form.next_followup_date }}
+                  </div>
+
+                  <div class="form-group">
+                     <label class="form-label">Initial Status</label>
+                     {{ form.initial_status }}
+                  </div>
+
+               </div>
+
+               <div class="form-actions">
+                  <button type="button" class="btn-cancel" onclick="clearForm()">Clear</button>
+                  <button type="submit" class="btn-submit" id="submit-btn">Save Lead</button>
+               </div>
+
+             </form>
+
+         </div>
+
+      </section>
+
+      <!-- Recent Leads -->
+      <section class="recent-leads-section">
+         <div class="content-card">
+            <div class="card-header">
+               <h2 class="card-title">Recent Leads Today</h2>
+            </div>
+
+            <div class="table-wrapper">
+               <table class="data-table">
+                  <thead>
+                     <tr>
+                        <th>Lead ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Follow-Up</th>
+                     </tr>
+                  </thead>
+
+                  <tbody>
+                     {% for lead in recent_leads %}
+                     <tr>
+                        <td>{{ lead.lead_id }}</td>
+                        <td>{{ lead.lead_name }}</td>
+                        <td>{{ lead.phone_no }}</td>
+                        <td>{{ lead.course_interested }}</td>
+                        <td>{{ lead.initial_status|title }}</td>
+                        <td>{{ lead.next_followup_date }}</td>
+                     </tr>
+                     {% empty %}
+                     <tr>
+                        <td colspan="6"> No Leads Today </td>
+                     </tr>
+                     {% endfor %}
+
+                  </tbody>
+
+               </table>
+
+            </div>
+         </div>
+      </section>
+
+</section>
+{% endblock %}

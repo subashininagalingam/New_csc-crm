@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>{% block title %}CSC CRM{% endblock %}</title> -->
+    <link rel="stylesheet" href="{% static 'css/staff_css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/management.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/add_staff.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/attendance.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/staff_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/confirm_delete.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/edit_staff.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff_css/overview.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="top-header">
+        <div class="logo-text">CSC</div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-links">
+
+            <a href="{% url 'staff_dashboard' %}"
+               class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="{% url 'staff_management' %}"
+               class="{% if request.resolver_match.url_name == 'staff_management' %}active{% endif %}">
+                Staff Management
+            </a>
+
+            <a href="#"
+               class="{% if request.resolver_match.url_name == 'staff_profile' %}active{% endif %}">
+                Staff Profile
+            </a> 
+
+            <a href="{% url 'leads:lead_capture_list' %}"
+               class="{% if request.resolver_match.url_name == 'lead_assignment' %}active{% endif %}">
+                Lead Assignment
+            </a>
+
+
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-left">
+            © 2026 CSC CRM
+        </div>
+
+        <div class="footer-right">
+            Internal System
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+
+
+</html>

@@ -1,0 +1,162 @@
+{% extends 'attendance/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Student Attendance - Batches</title>
+{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/attendance_css/batches.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="main-content">
+
+    <div class="container-fluid mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Student Attendance — Batches</h2>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by batch, course, trainer, timing...">
+            </div>
+            <button class="btn " data-bs-toggle="modal" data-bs-target="#batchModal">+ New Batch</button>
+        </div>
+
+        <!-- TOP CARDS -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="top-card">
+                    <div class="icon-box icon-batches">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <p>Total Batches</p>
+                    <h2 id="totalBatches">0</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="top-card">
+                    <div class="icon-box icon-marked">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p>Attendance Marked</p>
+                    <h2 id="attendanceMarked">0</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="top-card">
+                    <div class="icon-box icon-notmarked">
+                        <i class="fa-regular fa-clock"></i>
+                    </div>
+                    <p>Not Marked</p>
+                    <h2 id="notMarked">0</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="top-card">
+                    <div class="icon-box icon-students">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <p>Total Students</p>
+                    <h2 id="totalStudents">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- BATCHES -->
+        <div class="row mt-3" id="batchContainer"></div>
+
+        <!-- BATCH CREATE MODAL -->
+        <div class="modal fade" id="batchModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content attendance-modal">
+
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title">Create New Batch</h5>
+
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
+                        </button>
+                    </div>
+
+                    <form method="post" id="batchForm">
+                        {% csrf_token %}
+
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label>Batch Name</label>
+                                {{ form.batch_name }}
+                            </div>
+
+                            <div class="grid gap-3">
+                                <div class="mb-3">
+                                    <label>Course</label>
+                                    {{ form.course }}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Timing</label>
+                                    {{ form.timing }}
+                                </div>
+                            </div>
+
+                            <div class="grid gap-3">
+                                <div class="mb-3">
+                                    <label>Start Date</label>
+                                    {{ form.start_date }}
+                                    <div id="startDateError" class="text-danger mt-1"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>End Date</label>
+                                    {{ form.end_date }}
+                                    <div id="endDateError" class="text-danger mt-1"></div>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-3">
+                                <div class="mb-3">
+                                    <label>Start Time</label>
+                                    {{ form.start_time }}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>End Time</label>
+                                    {{ form.end_time }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Trainer</label>
+                                {{ form.trainer }}
+                                <div id="trainerError" class="text-danger mt-1"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer border-secondary">
+
+                            <button type="button" class="btn" id="btn-cancel" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="btn" id="btn-cancel">
+                                Create Batch
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/attendance_js/batches.js' %}"></script>
+{% endblock %}

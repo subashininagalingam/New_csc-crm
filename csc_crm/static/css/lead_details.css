@@ -1,0 +1,165 @@
+/* 
+   CSC CRM - lead_details.css
+   Theme:
+   Yellow : #FEF200
+   Navy   : #262170
+*/
+
+:root{
+     --primary:#262170;
+     --secondary:#FEF200;
+     --white:#ffffff; 
+     --light:#f5f7fb; 
+     --text:#1f2937; 
+     --muted:#6b7280; 
+     --border:#e5e7eb; 
+     --shadow:0 10px 24px rgba(0,0,0,0.08); }
+
+/* PAGE WRAPPER */
+.lead-details-page{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* DETAIL CARDS */
+.lead-details-selection{
+    background: var(--white);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+/* HEADER */
+.details-header{
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+}
+.lead-avatar{
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+
+    background: var(--secondary);
+    color: var(--primary);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+.lead-title{
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 6px;
+}
+.lead-id{
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* GROUP BLOCK */
+
+.details-group{
+    margin-bottom:28px;
+}
+.group-title{
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--secondary);
+}
+/* INFO GRID */
+.details-row{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 18px;
+}
+.details-item{
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+}
+.details-label{
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.details-value{
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    word-break: break-word;
+}
+
+/* NOTES BOX */
+.notes-box{
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--secondary);
+    border-radius: 14px;
+    padding: 20px;
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 90px;
+}
+/* ACTION BUTTONS */
+.details-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+/* BACK BUTTON */
+.btn-back{
+    text-decoration: none;
+    background: var(--primary);
+    color: var(--white);
+
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+.btn-back:hover{
+    transform: translateY(-2px);
+}
+/* EDIT BTN */
+.details-actions a:last-child{
+    background: var(--secondary);
+    color: var(--primary);
+}
+/* RESPONSIVE */
+@media(max-width:992px){
+    .details-row{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media(max-width:768px){
+    .details-header{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .details-row{
+        grid-template-columns: 1fr;
+    }
+    .details-actions{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-back{
+        text-align: center;
+    }
+}

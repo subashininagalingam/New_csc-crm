@@ -1,0 +1,300 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial;
+    background: rgb(236, 237, 241);
+    padding: 20px;
+}
+
+.container {
+    display: grid !important;
+    grid-template-columns: 60% 40%;
+    gap: 30px;
+    align-items: start;
+}
+
+.form-box {
+    width: 100%;
+}
+
+
+.sub-text {
+    color: rgb(140, 142, 169);
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.label {
+    font-size: 12px;
+    color: rgb(88, 86, 86);
+    font-weight: bold;
+}
+
+.input, .select, .textarea {
+    width: 100%;
+    padding: 8px 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(36, 36, 39, 0.232);
+    border-radius: 10px;
+    
+    font-size: 14px;
+    height: 38px;
+    box-sizing: border-box;
+    
+}
+.input:focus, 
+.select:focus, 
+.textarea:focus {
+    outline: none;
+    border: 1px solid rgba(9, 100, 170, 0.623); 
+}
+
+
+.row {
+    display: flex;
+    gap: 25px;
+    align-items: flex-end;
+}
+
+.field {
+    width: 50%;
+}
+
+.textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background: rgb(4, 4, 138);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: rgb(37, 35, 158);
+}
+
+.fa-phone.save {
+    color: rgb(248, 199, 2);
+}
+
+h2 {
+    color: rgb(11, 11, 149);
+}
+
+.history {
+    
+    width: 100%;
+    max-height: 550px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+}
+
+.recent-header {
+    position: sticky;
+    top: 0;
+    background-color: rgb(250, 247, 247);
+    z-index: 2;
+    padding: 10px 0;
+    
+}
+
+.card {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-left: 4px solid white;
+    background: rgb(250, 247, 247);
+    border-radius: 8px;
+    transition: 0.2s;
+    position: relative;
+}
+
+.card:hover {
+    transform: scale(1.01);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.time {
+    font-size: 11px;
+    color: grey;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.card p {
+    font-size: 13px;
+    margin: 5px 0;
+    color: rgb(90, 88, 88);
+}
+
+.follow {
+    font-size: 12px;
+    color: rgb(26, 21, 188);
+}
+
+.delete-btn {
+    background: rgb(244, 87, 87);
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    position: absolute;
+    top:35px;
+    right: 30px;
+}
+
+.delete-btn:hover {
+    background: rgb(238, 75, 75);
+}
+
+.interested { border-color: rgb(90, 226, 90); }
+.interested .badge { background: rgb(149, 231, 149); color: rgb(36, 42, 28); }
+
+.not-reachable { border-color: rgba(255, 166, 0, 0.775); }
+.not-reachable .badge { background: rgb(231, 189, 110); color: rgb(147, 57, 24); }
+
+.demo-scheduled { border-color: rgb(112, 209, 222); }
+.demo-scheduled .badge { background: rgb(154, 206, 228); color: rgb(27, 71, 121); }
+
+.not-interested { border-color: rgba(243, 74, 74, 0.796); }
+.not-interested .badge { background: rgb(242, 146, 146); color: rgb(94, 24, 24); }
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index:10;
+}
+
+.popup-content {
+    background: #fdf8f8;
+    width: 400px;
+    padding: 20px;
+    margin: 8% auto;
+    border-radius: 10px;
+    
+   
+}
+.popup-content h3 {
+    margin-bottom: 25px;
+}
+
+.popup-content p {
+    margin-bottom: 18px;
+}
+.close {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+}
+#name_error{
+    color: #e63946;
+    font-size: 13px;
+    font-weight: 500;
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 12px;
+}
+@media screen and (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .form-box,
+    .history {
+        width: 100%;
+    }
+
+    .history {
+        max-height: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .sub-text {
+        font-size: 13px;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .field {
+        width: 100%;
+    }
+
+    input, select, textarea {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .card h4 {
+        font-size: 14px;
+    }
+
+    .time {
+        font-size: 10px;
+    }
+
+    .popup-content {
+        width: 90%;
+        margin: 25% auto;
+    }
+}

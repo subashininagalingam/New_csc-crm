@@ -1,0 +1,377 @@
+// CSRF helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.getElementById('batchForm')
+        .addEventListener('submit', async function (e) {
+
+            e.preventDefault()
+
+            document.getElementById("startDateError").innerText = "";
+            document.getElementById("endDateError").innerText = "";
+            document.getElementById("trainerError").innerText = "";
+
+            const startDate = document.getElementById('id_start_date').value;
+            const endDate = document.getElementById('id_end_date').value;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            let hasError = false;
+
+            if (start <= today) {
+                document.getElementById("startDateError").innerText =
+                    "Start date must be a future date";
+                hasError = true;
+            }
+
+            if (end <= today) {
+                document.getElementById("endDateError").innerText =
+                    "End date must be a future date";
+                hasError = true;
+            }
+
+            if (end < start) {
+                document.getElementById("endDateError").innerText =
+                    "End date must be greater than start date";
+                hasError = true;
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            const res = await fetch('/api/batches/', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+
+                body: JSON.stringify({
+
+                    batch_name:
+                        document.getElementById('id_batch_name').value,
+
+                    course:
+                        document.getElementById('id_course').value,
+
+                    timing:
+                        document.getElementById('id_timing').value,
+
+                    start_time:
+                        document.getElementById('id_start_time').value,
+
+                    end_time:
+                        document.getElementById('id_end_time').value,
+
+                    trainer:
+                        document.getElementById('id_trainer').value || null,
+
+                    start_date:
+                        document.getElementById('id_start_date').value,
+
+                    end_date:
+                        document.getElementById('id_end_date').value,
+                })
+            })
+
+            if (res.ok) {
+
+                bootstrap.Modal
+                    .getInstance(document.getElementById('batchModal'))
+                    .hide()
+
+                document.getElementById('batchForm').reset()
+
+                loadBatches()
+
+                alert('Batch Created Successfully')
+            }
+            else {
+                try {
+                    const error = await res.json();
+                    console.log("SERVER ERROR:", error);
+
+                    if (error.trainer) {
+                        document.getElementById("trainerError").innerText =
+                            error.trainer[0];
+                    } else {
+                        alert(JSON.stringify(error, null, 2));
+                    }
+                } catch {
+                    const error = await res.text();
+                    console.log("SERVER ERROR:", error);
+                    alert(error);
+                }
+            }
+        })
+
+
+    function formatTime(timeStr) {
+
+        const date = new Date(`1970-01-01T${timeStr}`);
+
+        return date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
+    async function loadBatches(search = "") {
+
+        const res = await fetch(`/api/batches/?search=${encodeURIComponent(search)}`)
+        console.log(res)
+
+        const batches = await res.json()
+        console.log("Batches:", batches)
+
+
+        const container = document.getElementById('batchContainer')
+        container.innerHTML = ''
+
+        let totalStudents = 0
+        let markedCount = 0
+        let notMarkedCount = 0
+
+        document.getElementById('totalBatches').innerText = batches.length
+
+        batches.forEach(batch => {
+
+            //const today = new Date();
+            //today.setHours(0, 0, 0, 0);
+
+            //const startDate = new Date(batch.start_date);
+
+            //const isUpcoming = startDate > today;
+
+            const today = new Date().toISOString().split("T")[0];
+
+            const isUpcoming = batch.start_date > today;
+            const isCompleted = batch.end_date < today;
+            const isOngoing = !isUpcoming && !isCompleted;
+
+
+            console.log(batch);
+
+            totalStudents += batch.student_count
+
+            //if (batch.is_marked) markedCount++
+            // else notMarkedCount++
+
+            if (isOngoing) {
+
+                if (batch.is_marked) {
+                    markedCount++;
+                } else {
+                    notMarkedCount++;
+                }
+
+            }
+
+            container.innerHTML += `
+        <div class="col-lg-4 col-md-6">
+            <div class="batch-card ${isUpcoming ? 'upcoming' : ''}" id="batch-${batch.id}">
+
+                <div class="d-flex justify-content-between">
+                    <h4 class="batch-title">
+    ${batch.course_name} ${batch.batch_name}
+</h4>
+
+                    <span class="status ${batch.is_marked ? 'marked' : 'not-marked'}">
+                        ${batch.is_marked ? 'Marked' : 'Not Marked'}
+                    </span>
+                </div>
+
+                <p class="mt-2"><i class="fa-regular fa-clock"></i> ${batch.timing} - ${formatTime(batch.start_time)} to ${formatTime(batch.end_time)}</p>
+
+                <p>Total Students: <strong>${batch.student_count}</strong></p>
+                <p>Trainer: <strong>${batch.trainer_name || 'No Trainer'}</strong></p>
+
+                ${isUpcoming
+                    ? `<button class="btn-attendance" disabled>
+        Upcoming
+       </button>`
+                    : isCompleted
+                        ? `<button class="btn-attendance" disabled>
+        Completed
+       </button>`
+                        : `<button class="btn-attendance"
+        onclick="window.location.href='/api/mark-attendance/${batch.id}/'">
+        ${batch.is_marked ? 'Update Entry' : 'Mark Attendance'}
+       </button>`
+                }
+
+            </div>
+        </div>
+        `
+        })
+
+        document.getElementById('totalStudents').innerText = totalStudents
+        document.getElementById('attendanceMarked').innerText = markedCount
+        document.getElementById('notMarked').innerText = notMarkedCount
+    }
+
+    async function markAttendance(enrollment, batchId, status, remarks) {
+
+        for (let data of attendanceData) {
+
+            if ((data.status === 'Absent' || data.status === 'Late') && !data.remarks) {
+                alert("Remarks required")
+                return
+            }
+
+            const res = await fetch('/api/attendance/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    enrollment: enrollment,
+                    batch: batchId,
+                    status: status,
+                    remarks: remarks,
+                })
+            })
+        }
+
+        if (res.ok) {
+            alert("Attendance Marked Successfully 👍")
+
+            // reload to update UI
+            loadBatches()
+        } else {
+            const err = await res.text()
+            console.log("Error:", err)
+            alert("Failed to mark attendance ❌")
+        }
+    }
+
+    loadBatches()
+
+    document.getElementById('searchInput')
+        .addEventListener('input', function () {
+
+            loadBatches(this.value);
+        });
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const today = new Date().toISOString().split('T')[0];
+
+        document.querySelectorAll('input[type="date"], input[type="time"]')
+            .forEach(input => {
+
+                // Open picker
+                input.addEventListener("click", function () {
+
+                    if (this.showPicker) {
+                        this.showPicker();
+                    }
+
+                });
+
+            });
+
+        const startDate = document.getElementById("id_start_date");
+        const endDate = document.getElementById("id_end_date");
+
+
+
+        startDate.min = today;
+        endDate.min = today;
+
+        function validateDates() {
+
+            document.getElementById("startDateError").innerText = "";
+            document.getElementById("endDateError").innerText = "";
+
+            if (startDate.value && startDate.value <= today) {
+
+                document.getElementById("startDateError").innerText =
+                    "Start date must be a future date";
+            }
+
+            if (endDate.value && endDate.value <= today) {
+
+                document.getElementById("endDateError").innerText =
+                    "End date must be a future date";
+            }
+
+            if (
+                startDate.value &&
+                endDate.value &&
+                endDate.value < startDate.value
+            ) {
+
+                document.getElementById("endDateError").innerText =
+                    "End date must be greater than start date";
+            }
+        }
+
+        startDate.addEventListener("input", validateDates);
+        endDate.addEventListener("input", validateDates);
+
+        startDate.addEventListener("change", validateDates);
+        endDate.addEventListener("change", validateDates);
+    });
+
+
+    async function autoCalculateEndDate() {
+
+        const courseId =
+            document.getElementById("id_course").value;
+
+        const startDate =
+            document.getElementById("id_start_date").value;
+
+        if (!courseId || !startDate) {
+            return;
+        }
+
+        const response = await fetch(
+            `/api/course-duration/${courseId}/`
+        );
+
+        const data = await response.json();
+
+        let endDate = new Date(startDate);
+
+        endDate.setMonth(
+            endDate.getMonth() + data.duration
+        );
+
+        document.getElementById("id_end_date").value =
+            endDate.toISOString().split("T")[0];
+    }
+
+    document.getElementById("id_course")
+        .addEventListener(
+            "change",
+            autoCalculateEndDate
+        );
+
+    document.getElementById("id_start_date")
+        .addEventListener(
+            "change",
+            autoCalculateEndDate
+        );

@@ -1,0 +1,216 @@
+{% extends 'staff/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ===== MESSAGES ===== -->
+{% if messages %}
+<div class="prof-messages">
+    {% for message in messages %}
+        <div class="prof-alert {% if message.tags == 'success' %}prof-alert-success{% else %}prof-alert-error{% endif %}">
+            <i class="fa {% if message.tags == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="prof-top-header">
+    <div>
+        <h1>My Profile</h1>
+        <div class="prof-breadcrumb">Dashboard &rsaquo; My Profile</div>
+    </div>
+    <div class="prof-header-actions">
+        <button class="prof-btn-edit" onclick="openEditModal()">
+            <i class="fa fa-pencil"></i> Edit Profile
+        </button>
+    </div>
+</div>
+
+<!-- ===== PROFILE CARD ===== -->
+<div class="prof-card">
+
+    <!-- LEFT : Photo + Name + Badges -->
+    <div class="prof-photo-col">
+
+        <div class="prof-photo-wrap">
+            {% if staff.profile_photo %}
+                <img src="{{ staff.profile_photo.url }}" alt="Profile Photo">
+            {% else %}
+                <img src="https://th.bing.com/th/id/OIP.dDKYQqVBsG1tIt2uJzEJHwHaHa?w=180&h=180&c=7&r=0&o=7&dpr=1.5&pid=1.7&rm=3" alt="Default Photo">
+            {% endif %}
+            <div class="prof-status-dot prof-dot-{{ staff.status }}"></div>
+        </div>
+
+        <div class="prof-name">{{ staff.first_name }} {{ staff.last_name }}</div>
+        <div class="prof-role">{{ staff.role }}</div>
+        <div class="prof-emp-label">EMP ID</div>
+        <div class="prof-emp-id">{{ staff.employee_id }}</div>
+        <div class="prof-status-badge prof-badge-{{ staff.status }}">
+            {{ staff.get_status_display }}
+        </div>
+
+    </div>
+
+    <!-- RIGHT : Info Grid -->
+    <div class="prof-info-grid">
+
+        <div class="prof-info-cell">
+            <div class="prof-cell-label"><i class="fa fa-building"></i> Department</div>
+            <div class="prof-cell-value">{{ staff.department }}</div>
+        </div>
+
+        <div class="prof-info-cell">
+            <div class="prof-cell-label"><i class="fa fa-calendar-days"></i> Date of Joining</div>
+            <div class="prof-cell-value">{{ staff.date_of_joining|date:"d M Y" }}</div>
+        </div>
+
+        <div class="prof-info-cell">
+            <div class="prof-cell-label"><i class="fa fa-envelope"></i> Email</div>
+            <div class="prof-cell-value">{{ staff.email }}</div>
+        </div>
+
+        <div class="prof-info-cell">
+            <div class="prof-cell-label"><i class="fa fa-briefcase"></i> Employment Type</div>
+            <div class="prof-cell-value">Full-time</div>
+        </div>
+
+        <div class="prof-info-cell">
+            <div class="prof-cell-label"><i class="fa fa-phone"></i> Phone</div>
+            <div class="prof-cell-value">{{ staff.phone }}</div>
+        </div>
+
+        <div class="prof-info-cell">
+            <div class="prof-cell-label"><i class="fa fa-circle-check"></i> Status</div>
+            <div class="prof-cell-value val-active">{{ staff.get_status_display }}</div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===== KPI CARDS ===== -->
+<div class="prof-kpi-grid">
+
+    <div class="prof-kpi-card">
+        <div class="prof-kpi-icon kpi-blue"><i class="fa fa-calendar-check"></i></div>
+        <div class="prof-kpi-text">
+            <p>Attendance (This Month)</p>
+            <h3>{{ days_present }} <small>/ {{ working_days }} Days</small></h3>
+        </div>
+    </div>
+
+    <div class="prof-kpi-card">
+        <div class="prof-kpi-icon kpi-orange"><i class="fa fa-file-lines"></i></div>
+        <div class="prof-kpi-text">
+            <p>Leave Balance</p>
+            <h3>{{ leave_balance }} <small>Days</small></h3>
+        </div>
+    </div>
+
+    <div class="prof-kpi-card">
+        <div class="prof-kpi-icon kpi-purple"><i class="fa fa-star"></i></div>
+        <div class="prof-kpi-text">
+            <p>Performance Rating</p>
+            <h3>{{ staff.performance_rating }} <small>/ 5</small></h3>
+        </div>
+    </div>
+
+    <div class="prof-kpi-card">
+        <div class="prof-kpi-icon kpi-green"><i class="fa fa-circle-check"></i></div>
+        <div class="prof-kpi-text">
+            <p>Tasks Completed</p>
+            <h3>{{ tasks_completed }} <small>/ {{ tasks_total }}</small></h3>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== EDIT PROFILE MODAL ===== -->
+<div class="prof-modal-overlay" id="editModal">
+    <div class="prof-modal">
+
+        <button class="prof-modal-close" onclick="closeEditModal()" type="button">&times;</button>
+        <h2><i class="fa fa-user-pen" style="margin-right:8px;color:var(--primary)"></i>Edit Profile</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Photo upload -->
+            <div class="prof-photo-upload" onclick="document.getElementById('profilePhotoInput').click()">
+                <i class="fa fa-camera"></i>
+                <p>Click to change profile photo (Max 2MB)</p>
+            </div>
+            <!-- Hidden file input rendered by Django form -->
+            {{ form.profile_photo }}
+            {% if form.profile_photo.errors %}
+                <ul class="prof-error-list">
+                    {% for err in form.profile_photo.errors %}<li>{{ err }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="prof-form-grid">
+
+                <div class="prof-form-group">
+                    <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <ul class="prof-error-list">{% for e in form.first_name.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+
+                <div class="prof-form-group">
+                    <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <ul class="prof-error-list">{% for e in form.last_name.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+
+                <div class="prof-form-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <ul class="prof-error-list">{% for e in form.email.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+
+                <div class="prof-form-group">
+                    <label for="{{ form.phone.id_for_label }}">Phone</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <ul class="prof-error-list">{% for e in form.phone.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <button type="submit" class="prof-btn-save">
+                <i class="fa fa-floppy-disk"></i>&nbsp; Save Changes
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+
+{% block extra_js %}
+
+<script>
+function openEditModal()  { document.getElementById('editModal').classList.add('open'); }
+function closeEditModal() { document.getElementById('editModal').classList.remove('open'); }
+
+    // Close on backdrop click
+    document.getElementById('editModal').addEventListener('click', function(e) {
+        if (e.target === this) closeEditModal();
+    });
+    
+
+    // Auto-open modal if there were form errors (so user sees them)
+{% if form.errors %}
+    openEditModal();
+{% endif %}</script>
+{% endblock %}
+
+{% endblock %}

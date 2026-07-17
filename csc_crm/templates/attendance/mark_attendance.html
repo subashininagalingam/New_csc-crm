@@ -1,0 +1,252 @@
+{% extends 'attendance/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}
+<title>Student Attendance - Mark Attendance</title>
+{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/attendance_css/mark_attendance.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h2 class="page-title">
+            Mark Attendance — {{ batch.course.course_name }} {{ batch.batch_name }}
+        </h2>
+
+        <div class="top-actions">
+
+            <div class="search-box mb-3">
+                <i class="fas fa-search" style="color: gray; "></i>
+                <input type="text" id="searchInput" class="form-control"
+                    placeholder="Search Student Name or Student ID...">
+            </div>
+
+            <a href="{% url 'batches_page' %}" class="btn btn-back">
+                Back
+            </a>
+
+            <button class="btn btn-submit" onclick="openAttendanceModal()">
+                Submit Attendance
+            </button>
+
+        </div>
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="stats-card">
+                <p>Total</p>
+                <h2 id="totalCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stats-card">
+                <p>Present</p>
+                <h2 id="presentCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stats-card">
+                <p>Absent</p>
+                <h2 id="absentCount">0</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stats-card">
+                <p>Late</p>
+                <h2 id="lateCount">0</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="attendance-table">
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+
+            <tbody id="studentBody"></tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content attendance-modal">
+
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <h4>Confirm Attendance Submission</h4>
+
+                <div class="summary-box">
+
+                    <div class="summary-card present-card">
+                        <h3 id="modalPresent">0</h3>
+                        <span>Present</span>
+                    </div>
+
+                    <div class="summary-card absent-card">
+                        <h3 id="modalAbsent">0</h3>
+                        <span>Absent</span>
+                    </div>
+
+                    <div class="summary-card late-card">
+                        <h3 id="modalLate">0</h3>
+                        <span>Late</span>
+                    </div>
+
+                </div><br>
+
+                <div class="attendance-overview">
+                    <h5 style="color: rgb(255, 202, 43);">
+                        Attendance Status :
+                        <span id="attendancePercentage"></span>
+                    </h5>
+                </div>
+                <div class="mt-4">
+
+                    <div class="mb-3">
+                        <label class="form-label">Topic Covered *</label>
+                        <input type="text" id="topicCovered" class="form-control" placeholder="Enter topic covered"
+                            value="{{ syllabus_log.topic_covered|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Duration *</label>
+
+                        <div class="row">
+                            <!-- <div class="col-6">
+                                <input type="number" id="durationHours" class="form-control" placeholder="Hours"
+                                    min="0" value="{{ duration_hours }}" oninput="toggleUnit('durationHours','hoursUnit')">
+                                <span id="hoursUnit" class="input-group-text" style="display:none;">Hours</span>
+                            </div>
+
+                            <div class="col-6">
+                                <input type="number" id="durationMinutes" class="form-control" placeholder="Minutes"
+                                    min="0" max="59" value="{{ duration_minutes }}" oninput="toggleUnit('durationMinutes','minutesUnit')">
+                                <span id="minutesUnit" class="input-group-text" style="display:none;">Minutes</span>
+                            </div> -->
+                            <div class="col-6">
+    <div class="form-floating">
+        <input type="number"
+               class="form-control"
+               id="durationHours"
+               name="duration_hours"
+               placeholder="Hours"
+               min="0"
+               value="{{ duration_hours }}">
+        <label for="durationHours" style="color:gray;">Hours</label>
+    </div>
+</div>
+
+<div class="col-6">
+    <div class="form-floating">
+        <input type="number"
+               class="form-control"
+               id="durationMinutes"
+               name="duration_minutes"
+               placeholder="Minutes"
+               min="0"
+               max="59"
+               value="{{ duration_minutes }}">
+        <label for="durationMinutes" style="color: gray;">Minutes</label>
+    </div>
+</div>
+                        </div>
+                        
+                        <div id="durationError"
+                         class="text-danger mt-1">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Next Topic</label>
+                        <input type="text" id="nextTopic" class="form-control" placeholder="Enter next topic"
+                            value="{{ syllabus_log.next_topic|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Trainer Notes</label>
+                        <textarea id="trainerNotes" class="form-control"
+                            rows="3">{{ syllabus_log.trainer_notes|default:'' }}</textarea>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0">
+
+                <button class="btn btn-back" data-bs-dismiss="modal">
+                    Go Back
+                </button>
+
+                <button class="btn btn-submit" onclick="submitAttendance()">
+                    Submit Now
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const csrfToken = "{{ csrf_token }}";
+</script>
+
+<script>
+const batchId = {{ batch.id }};
+const attendanceHistoryUrl = "{% url 'attendance_history' %}";
+
+const students = [
+{% for enrollment in enrollments %}
+{
+    enrollment: {{ enrollment.id }},
+    student_name: "{{ enrollment.student.first_name }} {{ enrollment.student.last_name }}",
+    student_id: "STU{{ enrollment.student.id }}",
+    photo: {% if enrollment.student.photo %}"{{ enrollment.student.photo.url }}"{% else %}null{% endif %},
+    status: "{{ attendance_map|get_item:enrollment.id|default:'Present' }}",
+    remarks: "{{ remarks_map|get_item:enrollment.id|default:''|escapejs }}"
+},
+{% endfor %}
+];
+</script>
+    <script src="{% static 'js/attendance_js/mark_attendance.js' %}"></script>
+{% endblock %}

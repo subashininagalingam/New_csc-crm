@@ -1,0 +1,252 @@
+
+{% extends 'staff/base.html' %} 
+{% load static %}   
+{% block content %}
+
+        <div class="management-container">
+            <!-- HEADER SECTION -->
+            <div class="management-header">
+                <div class="header-top">
+                    <div class="header-title">
+                        <h1 class="page-title">Staff Management</h1>
+                    </div>
+                    <form method="GET" class="header-action">
+                        <select name="department" class="filter-select department-filter" id="departmentFilter">
+                            <option value="">All Departments</option>
+                            {% for dept in departments %}
+                            <option 
+                                value="{{ dept.id }}"
+                                {% if request.GET.department == dept.id|stringformat:"s" %}selected{% endif %}>
+                                {{ dept.get_dept_name_display }}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <select name="role" class="filter-select role-filter" id="roleFilter">
+                            <option value="">All Roles</option>
+                            {% for role in roles %}
+                            <option 
+                                value="{{ role.id }}"
+                                {% if request.GET.role == role.id|stringformat:"s" %}selected{% endif %}>
+                                {{ role.get_role_name_display }}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <a href="{% url 'add_staff' %}" class="btn-add-staff">
+                            <span class="btn-icon">+</span>
+                            Add Staff
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ROLE PERMISSION MATRIX SECTION -->
+            <section class="permission-matrix-section">
+                <div class="matrix-header">
+                    <h2 class="matrix-title">Role Permission Matrix</h2>
+                </div>
+
+                <div class="matrix-table-wrapper">
+                    <table class="permission-matrix-table">
+                        <thead>
+                            <tr>
+                                <th class="module-column">Module</th>
+                                <th class="role-column">Admin</th>
+                                <th class="role-column">Manager</th>
+                                <th class="role-column">Sales Exec</th>
+                                <th class="role-column">Telecaller</th>
+                                <th class="role-column">Support</th>
+                                <th class="role-column">HR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for permission in permissions_matrix %}
+                            <tr>
+                                <td class="module-name">{{ permission.module }}</td>
+                                <td class="permission-cell">
+                                    <span class="permission-badge {{ permission.permission.admin|lower }}">
+                                        {{ permission.permission.admin }}
+                                    </span>
+                                </td>
+                                <td class="permission-cell">
+                                    <span class="permission-badge {{ permission.permission.manager|lower }}">
+                                        {{ permission.permission.manager }}
+                                    </span>
+                                </td>
+                                <td class="permission-cell">
+                                    <span class="permission-badge {{ permission.permission.sales_exec|lower }}">
+                                        {{ permission.permission.sales_exec }}
+                                    </span>
+                                </td>
+                                <td class="permission-cell">
+                                    <span class="permission-badge {{ permission.permission.telecaller|lower }}">
+                                        {{ permission.permission.telecaller }}
+                                    </span>
+                                </td>
+                                <td class="permission-cell">
+                                    <span class="permission-badge {{ permission.permission.support|lower }}">
+                                        {{ permission.permission.support }}
+                                    </span>
+                                </td>
+                                <td class="permission-cell">
+                                    <span class="permission-badge {{ permission.permission.hr|lower }}">
+                                        {{ permission.permission.hr }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- STAFF LIST SECTION -->
+            <section class="staff-list-section">
+                <form method="GET" class="list-actions" id="searchForm">
+                    <h2 class="list-title">All Staff ({{ total_staff }})</h2>
+                    <div class="list-actions">
+                        <input 
+                            name="search" 
+                            type="text" 
+                            class="search-input" 
+                            id="staffSearch" 
+                            placeholder="Search staff..."
+                            value="{{ request.GET.search|default:'' }}">
+                        <button type="submit" class="btn-search">Search</button>
+                        <a href="{% url 'export_staff' %}?{{ request.GET.urlencode }}"
+                           class="btn-export">
+                                Export
+                        </a>
+                    </div>
+                </form>
+
+                    
+
+                <!-- STAFF TABLE -->
+                <div class="staff-table-wrapper">
+                    <table class="staff-table">
+                        <thead>
+                            <tr>
+                                <th class="staff-column">Staff</th>
+                                <th class="role-column">Role</th>
+                                <th class="dept-column">Dept</th>
+                                <th class="leads-column">Leads Assigned</th>
+                                <th class="deals-column">Closed Deals</th>
+                                <th class="status-column">Status</th>
+                                <th class="performance-column">Performance</th>
+                                <th class="action-column">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for staff in staff_list %}
+                            <tr class="staff-row" data-staff-id="{{ staff.id }}">
+                                <td class="staff-info-cell">
+                                    <div class="staff-info">
+                                        <div class="staff-avatar">
+                                            {{ staff.get_initials }}
+                                        </div>
+                                        <div class="staff-details">
+                                            <h3 class="staff-name">{{ staff.first_name }} {{ staff.last_name }}</h3>
+                                            <p class="staff-id">{{ staff.employee_id }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="role-cell">
+                                    <span class="role-badge">{{ staff.role.get_role_name_display }}</span>
+                                </td>
+                                <td class="dept-cell">
+                                    <span class="dept-name">{{ staff.department.get_dept_name_display }}</span>
+                                </td>
+                                <td class="leads-cell">
+                                    <span class="leads-count">34</span>
+                                </td>
+                                <td class="deals-cell">
+                                    <span class="deals-count">22</span>
+                                </td>
+                                <td class="status-cell">
+                                    <span class="status-badge {{ staff.get_status_badge_class }}">
+                                        {{ staff.get_status_display }}
+                                    </span>
+                                </td>
+                                <td class="performance-cell">
+                                    <div class="performance-star">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= staff.performance_rating %}
+                                                <span class="star-filled">★</span>
+                                            {% else %}
+                                                <span class="star-empty">★</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="actions-cell">
+                                    <div class="action-buttons">
+
+                                       
+                                        <a href="{% url 'staff_profile' staff_id=staff.id %}" class="action-btn profile-btn" title="staff Profile">
+                                            <span class="action-icon">👤</span>
+                                        </a>
+                                        
+                                        <a href="{% url 'overview' staff.id %}" class="action-btn view-btn" title="View">
+                                            <span class="action-icon">👁</span>
+                                        </a>
+                                        <a href="{% url 'edit_staff' staff.id %}" class="action-btn edit-btn" title="Edit">
+                                            <span class="action-icon">✏</span>
+                                        </a>
+                                        {% if staff.status == 'terminated' %}
+                                            <button
+                                                type="button"
+                                                class="action-btn delete-btn"
+                                                title="Already Terminated"
+                                                disabled>
+                                                <span class="action-icon">🗑</span>
+                                            </button>
+                                        {% else %}
+                                            <a href="{% url 'delete_staff' staff.id %}?next={{ request.get_full_path|urlencode }}"
+                                            class="action-btn delete-btn"
+                                            title="Terminate">
+                                                <span class="action-icon">🗑</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr class="empty-row">
+                                <td colspan="8" class="empty-message">No staff members found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                {% if is_paginated %}
+                <div class="pagination-wrapper">
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                        <a href="?page=1&search={{ search_query }}" class="pagination-link">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}" class="pagination-link">Previous</a>
+                        {% endif %}
+
+                        <span class="pagination-info">
+                            page {{ page_obj_number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}" class="pagination-link">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}&search={{ search_query }}" class="pagination-link">Last</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+
+
+{% block extra_js %}
+<script src="{% static 'js/staff_js/management.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

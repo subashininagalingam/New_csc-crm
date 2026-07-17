@@ -1,0 +1,159 @@
+{% extends 'attendance/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Student Attendance - Dashboard</title>
+{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/attendance_css/dashboard.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="main-content">
+
+    <div class="topbar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search by Batch, Course, Trainer, Timing...">
+        </div>
+
+        <div class="profile">
+            <img src="{% static 'attendance/image/admin.jpeg' %}" alt="photo">
+            <div>
+                <h4>Admin</h4>
+                <p>Institute Admin</p>
+            </div>
+        </div>
+    </div><br>
+
+    <h2 class="dashboard-title">
+        📊 Attendance Dashboard
+        <span id="dashboardTitle" class="dashboard-subtitle">
+            Overall Summary
+        </span>
+    </h2>
+
+    <div class="batch-detail-card" id="batchDetailCard" style="display:none;">
+
+        <h4>Batch Details</h4>
+
+        <div id="batchList"></div>
+
+    </div><br>
+
+    <div class="stats-grid">
+
+        <div class="card">
+            <div style="display: flex;">
+                <div class="icon-box icon-students">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div style="margin-left: 5px;">
+                    <h3>Total Students</h3>
+                </div>
+            </div>
+            <h2 id="totalCount">{{ total }}</h2>
+            <p>
+                {% if total_percentage >= 0 %}
+                +{{ total_percentage }}%
+                {% else %}
+                {{ total_percentage }}%
+                {% endif %}
+                vs last month
+            </p>
+        </div>
+
+        <div class="card">
+            <div style="display: flex;">
+                <div class="icon-box icon-marked">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <div style="margin-left: 5px;">
+                    <h3>Present Today</h3>
+                </div>
+            </div>
+            <h2 id="presentCount">{{ present }}</h2>
+
+            <p>
+                Attendance Rate: {{ present_percentage }}%
+            </p>
+
+            {% if not last_attendance_date %}
+            <p>
+                No previous attendance data
+            </p>
+            {% else %}
+            <p>
+                {% if present_change > 0 %}
+                ↑ {{ present_change }}% higher than Last day
+                {% elif present_change < 0 %} ↓ {{ present_change|cut:"-" }}% lower than Last day {% else %} → No
+                    change from Last day {% endif %} </p>
+                    {% endif %}
+        </div>
+
+        <div class="card">
+            <div style="display: flex;">
+                <div class="icon-box icon-notmarked">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+                <div style="margin-left: 5px;">
+                    <h3>Absent Today</h3>
+                </div>
+            </div>
+            <h2 id="absentCount">{{ absent }}</h2>
+
+            <p>
+                Absent Rate: {{ absent_percentage }}%
+            </p>
+
+            {% if not last_attendance_date %}
+            <p>
+                No previous attendance data
+            </p>
+            {% else %}
+            <p>
+                {% if absent_change > 0 %}
+                ↑ {{ absent_change }}% higher than Last day
+                {% elif absent_change < 0 %} ↓ {{ absent_change|cut:"-" }}% lower than Last day {% else %} → No change
+                    from Last day {% endif %} </p>
+                    {% endif %}
+        </div>
+
+        <div class="card">
+
+    <h3>Late Today</h3>
+
+    <h2 id="lateCount">{{ late }}</h2>
+
+    <p>
+        Late Rate: {{ late_percentage }}%
+    </p>
+
+    {% if not last_attendance_date %}
+    <p>
+        No previous attendance data
+    </p>
+    {% else %}
+    <p>
+        {% if late_change > 0 %}
+            ↑ {{ late_change }}% higher than Last day
+        {% elif late_change < 0 %}
+            ↓ {{ late_change|cut:"-" }}% lower than Last day
+        {% else %}
+            → No change from Last day
+        {% endif %}
+    </p>
+    {% endif %}
+
+</div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/attendance_js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,223 @@
+
+{% extends 'leads/base.html' %}
+
+{% block content %}
+
+{% load static %}
+    <!-- HEADER -->
+    <h1 class="text-3xl font-bold mb-6 text-center">
+        Lead Conversion Dashboard
+    </h1>
+
+    <!-- SUMMARY CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-gray-500">Total Leads</h2>
+            <p class="text-2xl font-bold">{{ total_leads }}</p>
+        </div>
+
+        <div class="bg-green-100 p-6 rounded-2xl shadow">
+            <h2 class="text-gray-500">Enrolled</h2>
+            <p class="text-2xl font-bold text-green-600">{{ enrolled_leads }}</p>
+        </div>
+
+        <div class="bg-red-100 p-6 rounded-2xl shadow">
+            <h2 class="text-gray-500">Lost</h2>
+            <p class="text-2xl font-bold text-red-600">{{ lost_leads }}</p>
+        </div>
+
+        <div class="bg-blue-100 p-6 rounded-2xl shadow">
+            <h2 class="text-gray-500">Conversion Rate</h2>
+            <p class="text-2xl font-bold text-blue-600">
+                {{ conversion_rate |floatformat:2 }}%
+            </p>
+        </div>
+
+    </div>
+
+            <!-- CHARTS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- LEAD STAGE BAR CHART -->
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-lg font-semibold mb-4">Lead Stage Analysis</h2>
+            <canvas id="leadStageChart"></canvas>
+        </div>
+        <!-- PIE CHART -->
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-lg font-semibold mb-4">Lead Status</h2>
+            <canvas id="statusChart" style="max-width:300px; max-height:300px; margin:auto;"></canvas>
+        </div>
+        
+
+        {% comment %} <!-- BAR CHART -->
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-lg font-semibold mb-4">Source Performance</h2>
+            <canvas id="sourceChart"></canvas>
+        </div> {% endcomment %}
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="bg-white p-6 rounded-2xl shadow overflow-x-auto">
+        <h2 class="text-lg font-semibold mb-4">Lead Source Performance</h2>
+
+        <table class="min-w-full border-collapse text-sm">
+            <thead>
+                <tr class="bg-gray-200 text-left">
+                    <th class="p-3">Source</th>
+                    <th class="p-3">Total</th>
+                    <th class="p-3">Enrolled</th>
+                    <th class="p-3">Conversion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in source_performance %}
+                <tr class="border-b">
+                    <td class="p-3">{{ item.source }}</td>
+                    <td class="p-3">{{ item.total }}</td>
+                    <td class="p-3">{{ item.enrolled }}</td>
+                    <td class="p-3">{{ item.rate }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+        <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- CHART SCRIPT -->
+    <script>
+        const leadStageData = [
+        Number("{{ new_leads|default:0 }}"),
+        Number("{{ contacted_leads|default:0 }}"),
+        Number("{{ demo_leads|default:0 }}"),
+        Number("{{ enrolled_leads|default:0 }}"),
+        Number("{{ lost_leads|default:0 }}")
+    ];
+        // LEAD STAGE BAR CHART
+        new Chart(document.getElementById("leadStageChart"), {
+            type: "bar",
+            data: {
+                labels: ["New", "Contacted", "Demo Scheduled", "Enrolled", "Lost"],
+                datasets: [{
+                    label: "Leads Count",
+                    data:leadStageData,
+                    backgroundColor: [
+                        "#3b82f6", // New - Blue
+                        "#06b6d4", // Contacted - Cyan
+                        "#f59e0b", // Demo - Yellow
+                        "#22c55e", // Enrolled - Green
+                        "#ef4444"  // Lost - Red
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            {% comment %} options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }  {% endcomment %}
+        });
+        // PIE CHART DATA
+        const statusData = {
+        labels: [
+            "New",
+            "Contacted",
+            "Demo Scheduled",
+            "Enrolled",
+            "Lost"
+        ],
+
+        datasets: [{
+            data: [
+                {{ new_leads }},
+                {{ contacted_leads }},
+                {{ demo_leads }},
+                {{ enrolled_leads }},
+                {{ lost_leads }}
+            ],
+
+            backgroundColor: [
+                "#3b82f6",
+                "#06b6d4",
+                "#f59e0b",
+                "#22c55e",
+                "#ef4444"
+            ]
+        }]
+    };
+
+    new Chart(document.getElementById("statusChart"), {
+        type: "pie",
+        data: statusData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top"
+                }
+            }
+        }
+    });
+
+        // BAR CHART DATA
+        const sources = [
+            {% for item in source_performance %}
+                "{{ item.source }}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        const totals = [
+            {% for item in source_performance %}
+                {{ item.total }},
+            {% endfor %}
+        ];
+
+        const enrolled = [
+            {% for item in source_performance %}
+                {{ item.enrolled }},
+            {% endfor %}
+        ];
+
+        {% comment %} new Chart(document.getElementById("sourceChart"), {
+            type: "bar",
+            data: {
+                labels: sources,
+                datasets: [
+                    {
+                        label: "Total Leads",
+                        data: totals,
+                        backgroundColor: "#3b82f6"
+                    },
+                    {
+                        label: "Enrolled",
+                        data: enrolled,
+                        backgroundColor: "#22c55e"
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "top"
+                    }
+                }
+            }
+        }); {% endcomment %}
+    </script>
+
+
+
+{% endblock %}

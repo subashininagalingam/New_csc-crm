@@ -1,0 +1,439 @@
+
+{% extends 'staff/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="attendance-container">
+{% if messages %}
+
+    {% for message in messages %}
+
+        <div class="success-message">
+
+            {{ message }}
+
+        </div>
+
+    {% endfor %}
+
+{% endif %}
+
+
+
+
+    <!-- HEADING -->
+   <div class="heading-section">
+
+    <button class="att-nav-toggle" id="attnavToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    
+    <h1>Attendance</h1>
+
+      <div class="att-header-buttons">
+
+        <a href="{% url 'overview' staff.id %}" class="att-back-btn">
+            <i class="fa fa-arrow-left"></i> Back 
+        </a>
+
+
+    </div>
+     
+{% if staff.status != 'terminated' and staff.role.role_name != "Admin" %}
+
+    {% if today_attendance and today_attendance.status == 'Leave' %}
+
+        <a class="staff-disabled-btn">
+            On Leave
+        </a>
+
+    {% elif today_attendance and today_attendance.status == 'Absent' %}
+
+        <a class="staff-disabled-btn">
+            Absent
+        </a>
+
+    {% elif show_checkout %}
+
+        <a class="staff-checkout-btn"
+           href="{% url 'staff_checkin' staff.id %}">
+            Staff Check-Out
+        </a>
+
+    {% else %}
+
+        <a class="staff-checkin-btn"
+           href="{% url 'staff_checkin' staff.id %}">
+            Staff Check-In
+        </a>
+
+    {% endif %}
+
+{% endif %}
+</div>
+
+
+
+<!-- Hamburger -->
+
+<nav class="att-nav-tabs" id="attnavTabs">
+
+    <a href="{% url 'overview' staff.id %}" class="att-nav-tab-link {% if request.resolver_match.url_name == 'overview' %}active-att-nav-tab{% endif %}">
+        Overview
+    </a>
+
+    <a href="{% url 'attendance' staff.id %}"class="att-nav-tab-link {% if request.resolver_match.url_name == 'attendance' %} active-att-nav-tab{% endif %}">
+    Attendance
+    </a>
+
+    <a href="{% url 'staff_documents' staff.id %}" class="att-nav-tab-link">
+        Documents
+    </a>
+
+    <a href="#" class="att-nav-tab-link">
+        Activity Logs
+    </a>
+
+
+</nav>
+
+    
+<!-- ===== PROFILE ===== -->
+{% if staff.role.role_name == "BDE" or staff.role.role_name == "Telecall" or staff.role.role_name == "Sales Exec" or staff.role.role_name == "Manager" or staff.role.role_name == "Digital Marketing" or staff.role.role_name == "Content Creator" or staff.role.role_name == "HR" or staff.role.role_name == "Trainer" or staff.role.role_name == "Developer" %}
+<div class="over-profile-card">
+
+    <!-- LEFT SIDE -->
+    <div class="over-profile-left">
+
+        <div class="over-profile-image">
+
+            {% if staff.profile_photo %}
+                <img src="{{ staff.profile_photo.url }}" alt="Profile Image">
+            {% else %}
+                <img src="https://th.bing.com/th/id/OIP.dDKYQqVBsG1tIt2uJzEJHwHaHa?w=180&h=180&c=7&r=0&o=7&dpr=1.5&pid=1.7&rm=3" alt="Default Image">
+            {% endif %}
+
+            {% if staff.status == 'active' %}
+                <div class="over-online"></div>
+            {% else %}
+                <div class="over-offline"></div>
+            {% endif %}
+
+        </div>
+
+        <div class="over-profile-details">
+
+            <h1 class="over-name">
+                {{ staff.first_name }} {{ staff.last_name }}
+            </h1>
+
+            <div class="over-badges">
+
+                <div class="over-badge over-badge-blue">
+                    {{ staff.department }}
+                </div>
+
+                <div class="over-badge status-{{ staff.status }}">
+                    {{ staff.get_status_display }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="over-info-grid">
+
+    <!-- Row 1 -->
+    <div class="info-card">
+        <span>EMPLOYEE ID</span>
+        <h3>{{ staff.employee_id }}</h3>
+    </div>
+
+    <div class="info-card">
+        <span>ROLE</span>
+        <h3>{{ staff.role }}</h3>
+    </div>
+
+    <div class="info-card">
+        <span>PHONE</span>
+        <h3>{{ staff.phone }}</h3>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="info-card">
+        <span>DATE OF BIRTH</span>
+        <h3>{{ staff.date_of_birth }}</h3>
+    </div>
+
+    <div class="info-card">
+        <span>JOINING DATE</span>
+        <h3>{{ staff.date_of_joining }}</h3>
+    </div>
+
+    <div class="info-card">
+        <span>EMAIL</span>
+        <h3>{{ staff.email }}</h3>
+    </div>
+
+    <!-- Last Row -->
+    <div class="info-card">
+        <span>PERFORMANCE</span>
+        <h3>{{ staff.performance_rating }}/5</h3>
+    </div>
+
+</div>
+
+</div>
+{% endif %}
+
+
+<div id="attendance-dashboard" >
+
+    <!-- TOP CARDS -->
+    <div class="top-cards">
+
+        <div class="att-card att-blue">
+            <div class="card-content">
+                <p>Total Working Days</p>
+                <h2>{{ total_working_days }}</h2>
+            </div>
+        </div>
+
+        <div class="att-card att-green">
+            <div class="card-content">
+                <p>Present Days</p>
+                <h2>{{ present_days }}</h2>
+            </div>
+        </div>
+
+        <div class="att-card att-red">
+            <div class="card-content">
+                <p>Absent Days</p>
+                <h2>{{ absent_days }}</h2>
+            </div>
+        </div>
+
+        <div class="att-card att-yellow">
+            <div class="card-content">
+                <p>Leave Days</p>
+                <h2>{{ leave_days }}</h2>
+            </div>
+        </div>
+
+        <div class="att-card att-orange">
+            <div class="card-content">
+                <p>Late Days</p>
+                <h2>{{ late_days }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TODAY ATTENDANCE -->
+    <div class="today-attendance">
+
+        <div class="today-top">
+            <h2>Today's Attendance</h2>
+            
+            <span class="status-badge
+            {% if today_status == 'Present' %} present-badge
+            {% elif today_status == 'Absent' %} absent-badge
+            {% elif today_status == 'Leave' %} leave-badge
+            {% elif today_status == 'Late' %} late-badge
+            {% endif %}">
+                {{ today_status }}
+            </span>
+
+        </div>
+
+        <div class="attendance-boxes">
+
+            <div class="attendance-box">
+                <p>Log In</p>
+                <h3>{% if today_attendance %}
+                {{ today_attendance.log_in|time:"h:i A" }}
+            {% else %}
+                --
+            {% endif %}</h3>
+            </div>
+
+            <div class="attendance-box">
+                <p>Log Out</p>
+                <h3>{% if today_attendance %}
+                {{ today_attendance.log_out|time:"h:i A" }}
+            {% else %}
+                --
+            {% endif %}</h3>
+            </div>
+
+            <div class="attendance-box">
+                <p>Working Hours</p>
+                <h3> {% if today_attendance %}
+                {{ today_attendance.total_hours }}
+            {% else %}
+                --
+            {% endif %}</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PERCENTAGE -->
+    <div class="att-percentage-card">
+
+        <div class="att-percentage-top">
+            <h2>Attendance Percentage</h2>
+            <span>{{ attendance_percentage }}%</span>
+        </div>
+
+        <div class="att-progress-bar">
+            <div class="att-progress-fill"style="width:{{ attendance_percentage }}%;"></div>
+        </div>
+
+    </div>
+    
+
+
+    <!-- HISTORY -->
+    <div class="history-section">
+
+        <!-- FILTERS -->
+        <div class="history-top">
+
+            <form method="GET" id="attendance-filter-form">
+
+                <div class="filters">
+
+                    <!-- MONTH -->
+                    <select name="month">
+                        <option value="">Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+
+                    <!-- YEAR -->
+                    <select name="year">
+                        <option value="">Year</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+
+                    <!-- DATE -->
+                    <input type="date" name="date">
+
+                    <button type="submit" class="attendance-submit">
+                        Filter
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+        <div class="history-header">
+
+  <span>  <h2>Attendance History</h2></span>
+
+   <a href="{% url 'export_attendance' staff.id %}?{{ request.GET.urlencode }}" class="attendance-submit"> Export Excel</a>
+
+    </div>
+        
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+        <table >
+
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Log In</th>
+                    <th>Log Out</th>
+                    <th>Status</th>
+                    <th>Hours</th>
+                    
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for attendance in attendance_data %}
+                <tr>
+
+                    <td>{{ attendance.date }}</td>
+
+                    <td>
+                        {% if attendance.log_in %}
+                            {{ attendance.log_in|time:"h:i A" }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if attendance.log_out %}
+                            {{ attendance.log_out|time:"h:i A" }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <span class="table-status
+                        {% if attendance.status == 'Present' %} present
+                        {% elif attendance.status == 'Absent' %} absent
+                        {% elif attendance.status == 'Leave' %} leave
+                        {% elif attendance.status == 'Late' %} late-badge
+                        {% endif %}">
+                            {{ attendance.status }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ attendance.total_hours|default:"--" }}
+                    </td>
+
+
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="5" style="text-align:center; color:red;">
+                        No data found
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        </div>
+    </div>
+</div>
+</div>
+
+{% block extra_js %}
+<script src="{% static 'js/staff_js/attendance.js' %}"></script>
+{% endblock %}
+
+{% endblock %}
