@@ -582,7 +582,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!photoInput.files.length) return true;
 
         const file = photoInput.files[0];
-        const allowed = ["png", "jpg", "jpeg"];
+        const allowed = ["image/jpeg", "image/jpg", "image/png"];
 
         if (!allowed.includes(file.type)) {
             showError(photoInput, "Only JPG, JPEG and PNG are allowed.");
