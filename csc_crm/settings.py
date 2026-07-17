@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-_r7-ke=d^fsmsl=l1*(0#^2-*nngv*$_jg_)x(r0a*gh^o%dzr
 # SECRET_KEY = os.environ.get("SECRET_KEY", "temporary-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
